@@ -1,9 +1,9 @@
 cleo
 ===========================
 
-## Golang impl. inspired by LinkedIn's Cleo search
+## Golang implementation inspired by LinkedIn's Cleo search
 
-### Forked from [https://github.com/jamra/gocleo/](https://github.com/jamra/gocleo/). Areas improved:
+### Originally from [https://github.com/jamra/gocleo/](https://github.com/jamra/gocleo/). Areas improved:
 
 * Documents can now be added directly to the index (previously it was limited to being loaded from a text file).
 * Document identifiers are now strings instead of integers.
@@ -11,14 +11,9 @@ cleo
 
 The Cleo search is explained here: [LinkedIn original article](http://engineering.linkedin.com/open-source/cleo-open-source-technology-behind-linkedins-typeahead-search)
 
-The source for Jingwei Wu's version can be found here: [Jingwei's version](https://github.com/linkedin/cleo)
+### Documentation
 
-### Algorithm overview
- - The algorithm starts out by searching for matches in the inverted index. The inverted index contains a map of the word's prefix (up to 4 chars). Each word prefix maps to an array of document ID, bloom filter tuples. 
- - The bloom filter of each candidate is compared against the query's bloom filter.  If it matches successfully, the candidate makes it to the next round.
- - The remaining words are scored by their [levenshtein distance](http://en.wikipedia.org/wiki/Levenshtein_distance) to the query, then normalized using the [Jaccard coefficient](http://en.wikipedia.org/wiki/Jaccard_index).
- - You can also change how scoring works if you like. You just need to provide a function that conforms to
-    func(s1, s2 string) (score float64)
+[https://godoc.org/github.com/typerandom/cleo](https://godoc.org/github.com/typerandom/cleo)
 
 ### Instructions
 
