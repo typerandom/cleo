@@ -1,15 +1,10 @@
 package cleo
 
-//Used for the bloom filter
 const (
-	FNV_BASIS_64 = uint64(14695981039346656037)
-	FNV_PRIME_64 = uint64((1 << 40) + 435)
-	FNV_MASK_64  = uint64(^uint64(0) >> 1)
-	NUM_BITS     = 64
-
-	FNV_BASIS_32 = uint32(0x811c9dc5)
-	FNV_PRIME_32 = uint32((1 << 24) + 403)
-	FNV_MASK_32  = uint32(^uint32(0) >> 1)
+	fnvBasis64 = uint64(14695981039346656037)
+	fnvPrime64 = uint64((1 << 40) + 435)
+	fnvMask64  = uint64(^uint64(0) >> 1)
+	numBits    = 64
 )
 
 //The bloom filter of a word is 8 bytes in length
@@ -29,17 +24,19 @@ func computeBloomFilter(s string) int {
 
 		//first hash function
 		hash ^= uint64(0xFF & c)
-		hash *= FNV_PRIME_64
+		hash *= fnvPrime64
 
 		//second hash function (reduces collisions for bloom)
 		hash ^= uint64(0xFF & (c >> 16))
-		hash *= FNV_PRIME_64
+		hash *= fnvPrime64
 
 		//position of the bit mod the number of bits (8 bytes = 64 bits)
-		bitpos := hash % NUM_BITS
+		bitpos := hash % numBits
+
 		if bitpos < 0 {
-			bitpos += NUM_BITS
+			bitpos += numBits
 		}
+
 		filter = filter | (1 << bitpos)
 	}
 
