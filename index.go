@@ -17,19 +17,19 @@ func getPrefix(query string) string {
 
 //Inverted Index - Maps the query prefix to the matching documents
 
-type InvertedIndex map[string][]document
+type invertedIndex map[string][]document
 
-func NewInvertedIndex() *InvertedIndex {
-	i := make(InvertedIndex)
+func NewInvertedIndex() *invertedIndex {
+	i := make(invertedIndex)
 	return &i
 }
 
-func (x *InvertedIndex) Size() int {
+func (x *invertedIndex) Size() int {
 	return len(map[string][]document(*x))
 }
 
-func (x *InvertedIndex) Add(id string, value string) {
-	bloom := ComputeBloomFilter(value)
+func (x *invertedIndex) Add(id string, value string) {
+	bloom := computeBloomFilter(value)
 	for _, word := range strings.Fields(value) {
 		word = getPrefix(word)
 
@@ -43,7 +43,7 @@ func (x *InvertedIndex) Add(id string, value string) {
 	}
 }
 
-func (x *InvertedIndex) Search(query string) []document {
+func (x *invertedIndex) Search(query string) []document {
 	q := getPrefix(query)
 
 	if ref, ok := (*x)[q]; ok {
@@ -55,14 +55,14 @@ func (x *InvertedIndex) Search(query string) []document {
 
 //Forward Index - Maps the document id to the document
 
-type ForwardIndex map[string]string
+type forwardIndex map[string]string
 
-func NewForwardIndex() *ForwardIndex {
-	i := make(ForwardIndex)
+func NewForwardIndex() *forwardIndex {
+	i := make(forwardIndex)
 	return &i
 }
 
-func (x *ForwardIndex) Add(id string, value string) {
+func (x *forwardIndex) Add(id string, value string) {
 	for _, word := range strings.Fields(value) {
 		if _, ok := (*x)[id]; !ok {
 			(*x)[id] = word
@@ -70,6 +70,6 @@ func (x *ForwardIndex) Add(id string, value string) {
 	}
 }
 
-func (x *ForwardIndex) itemAt(i string) string {
+func (x *forwardIndex) itemAt(i string) string {
 	return (*x)[i]
 }

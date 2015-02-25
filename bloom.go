@@ -14,7 +14,7 @@ const (
 
 //The bloom filter of a word is 8 bytes in length
 //and has each character added separately
-func ComputeBloomFilter(s string) int {
+func computeBloomFilter(s string) int {
 	cnt := len(s)
 
 	if cnt <= 0 {

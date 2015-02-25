@@ -1,18 +1,19 @@
 package cleo
 
+type rankedResults []rankedResult
+
 type rankedResult struct {
 	Id    string  `json:"id"`
 	Value string  `json:"value"`
 	Score float64 `json:"score"`
 }
 
-type rankedResults []rankedResult
 type ScoreFn func(value, query string) (score float64)
-type ByScore struct{ rankedResults }
+type byScore struct{ rankedResults }
 
 func (s rankedResults) Len() int      { return len(s) }
 func (s rankedResults) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
-func (s ByScore) Less(i, j int) bool  { return s.rankedResults[i].Score > s.rankedResults[j].Score }
+func (s byScore) Less(i, j int) bool  { return s.rankedResults[i].Score > s.rankedResults[j].Score }
 
 //Levenshtein distance is the number of inserts, deletions,
 //and substitutions that differentiate one word from another.

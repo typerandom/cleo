@@ -23,16 +23,16 @@ import (
 )
 
 type Index struct {
-	forward  *ForwardIndex
-	inverted *InvertedIndex
-	scoreFn  ScoreFn
+	forward  *forwardIndex
+	inverted *invertedIndex
+	ScoreFn  ScoreFn
 }
 
 func NewIndex() *Index {
 	return &Index{
 		forward:  NewForwardIndex(),
 		inverted: NewInvertedIndex(),
-		scoreFn:  JacaardScoring,
+		ScoreFn:  JacaardScoring,
 	}
 }
 
@@ -59,17 +59,17 @@ func (ix *Index) Search(query string) []rankedResult {
 	results := make([]rankedResult, 0, 0)
 
 	candidates := ix.inverted.Search(query) //First get candidates from Inverted Index
-	qBloom := ComputeBloomFilter(query)
+	qBloom := computeBloomFilter(query)
 
 	for _, i := range candidates {
 		if testBytesFromQuery(i.bloom, qBloom) { //Filter using Bloom Filter
 			c := ix.forward.itemAt(i.id)  //Get whole document from Forward Index
-			score := ix.scoreFn(query, c) //Score the Forward Index between 0-1
+			score := ix.ScoreFn(query, c) //Score the Forward Index between 0-1
 			results = append(results, rankedResult{i.id, c, score})
 		}
 	}
 
-	sort.Sort(ByScore{results})
+	sort.Sort(byScore{results})
 
 	return results
 }
